@@ -14,13 +14,14 @@ class _mainScreenState extends State<main_screen> {
   String latestMsg = 'No messages yet';
   double weight = 0.0;
   bool leakage = false;
+  int internetIssue = 0;
 
-  triggerNotification(String msg) {
+  triggerNotification(String title, String msg) {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
         channelKey: 'basic_channel',
-        title: 'Alert',
+        title: title,
         body: msg,
         color: Colors.red,
       ),
@@ -62,16 +63,17 @@ class _mainScreenState extends State<main_screen> {
             } else if (message == 'Leakage: True') {
               leakage = true;
               _showAlertDialog(context,'ALERT: Gas leakage detected!');
-              triggerNotification("Gas leakage detected!");
+              triggerNotification("ALERT!", "Gas leakage detected!");
             } else if (message == 'Leakage: False') {
               leakage = false;
             }
           });
         });}
       isSubscribed = !isSubscribed;
-      if (isSubscribed && !mqttClientWrapper.isConnected){
+      if (isSubscribed && !mqttClientWrapper.isConnected && internetIssue <=2){
+        internetIssue++;
         _showAlertDialog(context, "Check your internet connection and Restart the app");
-        triggerNotification("Check your internet connection and Restart the app");
+        triggerNotification("ERROR", "Check your internet connection and Restart the app");
     }
     });
   }
