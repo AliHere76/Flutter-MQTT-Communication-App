@@ -16,7 +16,6 @@ class _SignupScreenState extends State<SignupScreen> {
     String password = _passwordController.text;
 
     bool isTaken = await _dbHelper.isUsernameTaken(username);
-    print("\n Ali Bhai \n");
 
     if (isTaken) {
       _showMessage('Username already taken');
